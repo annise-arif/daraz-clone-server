@@ -22,9 +22,9 @@ const client = new MongoClient(uri, {
   }
 });
 
-async function run() {
-    await client.connect();
-    const justForYouProducts = client.db("daraz-clone-server").collection("just-for-you-products-list");
+
+ client.connect();
+ const justForYouProducts = client.db("daraz-clone-server").collection("just-for-you-products-list");
 
  //data get from mongodb database
  app.get("/services", async(req, res) => {
@@ -37,9 +37,6 @@ async function run() {
       res.status(500).send(error);
     }
   });
-  
-}
-run().catch(console.dir);
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
