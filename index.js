@@ -4,6 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 const port = 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const query = require("express/lib/middleware/query");
 
 
 //middleware
@@ -26,7 +27,7 @@ const client = new MongoClient(uri, {
  client.connect();
  const justForYouProducts = client.db("daraz-clone-server").collection("just-for-you-products-list");
 
- //data get from mongodb database
+ //get JustForYou services
  app.get("/services", async(req, res) => {
     try {
       const query = {};
@@ -37,11 +38,12 @@ const client = new MongoClient(uri, {
       res.status(500).send(error);
     }
   });
+  //get service by id
  app.get("/services/:id", async(req, res) => {
     try {
       const id = req.params.id;
-      const query = {_id: ObjectId(id)};
-      const cursor = justForYouProducts.findOne(query);
+      const query = {_id: parseInt(id)};
+      const cursor = justForYouProducts.find(query);
       const services = await cursor.toArray();
       res.send(services);
     } catch (error) {
