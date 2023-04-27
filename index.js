@@ -3,7 +3,7 @@ const app = express()
 const cors = require("cors");
 require("dotenv").config();
 const port = 5000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 //middleware
@@ -37,10 +37,21 @@ const client = new MongoClient(uri, {
       res.status(500).send(error);
     }
   });
-
+ app.get("/services/:id", async(req, res) => {
+    try {
+      const id = req.params.id;
+      const query = {_id: ObjectId(id)};
+      const cursor = justForYouProducts.findOne(query);
+      const services = await cursor.toArray();
+      res.send(services);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  });
 app.get('/', (req, res) => {
   res.send('Hello World!')
-})
+});
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
